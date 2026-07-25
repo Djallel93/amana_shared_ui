@@ -1,0 +1,28 @@
+# ── Dépendances ──────────────────────────────────────────────────────────
+node_modules
+
+# package-lock.json n'est PAS commité : ce package est distribué en SOURCE
+# (voir README.md — pas de build, chaque app le compile via son propre
+# Vite) et n'a pas de dépendances propres à verrouiller pour un
+# consommateur (seul "vue" est requis, en peerDependency). Un lockfile ici
+# n'aurait de sens que pour le dev local de CE package (tests, tooling),
+# pas pour ses consommateurs.
+package-lock.json
+
+# Si jamais un jour un build est ajouté (actuellement aucun — voir
+# package.json "main"/"exports" qui pointent directement vers src/) :
+/dist
+
+# ── Logs ─────────────────────────────────────────────────────────────────
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ── Éditeur / OS ─────────────────────────────────────────────────────────
+.idea
+.vscode
+.DS_Store
+Thumbs.db
+
+# ── Environnement local ──────────────────────────────────────────────────
+.env

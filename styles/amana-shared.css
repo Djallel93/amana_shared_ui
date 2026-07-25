@@ -1,0 +1,148 @@
+/* @amana/shared-ui/styles/amana-shared.css
+ *
+ * Jetons de couleur (clair/sombre) + styles résiduels du shell partagé
+ * (sidebar, hamburger, flash, scrollbar) — extraits de
+ * amana_web_planning/public/css/custom.css, la partie qui n'a rien de
+ * spécifique au planning (chips de tâches, lignes "moi", etc. restent
+ * dans le custom.css propre à chaque app).
+ *
+ * Import dans le app.css de chaque app, AVANT les directives Tailwind :
+ *
+ *   @import "@amana/shared-ui/styles/amana-shared.css";
+ *   @import "./custom.css";   <!-- résiduel propre à l'app, s'il y en a -->
+ *   @tailwind base;
+ *   @tailwind components;
+ *   @tailwind utilities;
+ */
+
+/* ── Jetons de couleur (mode clair / mode sombre) ──────────────────────────
+ * Alimentent les couleurs `surface` et `ink` du préréglage Tailwind
+ * (tailwind-preset.js), format "R G B" requis par rgb(var(--x) / <alpha-value>).
+ * Basculer <html class="dark"> (voir lib/theme.ts) change ces valeurs et
+ * donc l'apparence de toute l'app.
+ */
+:root {
+    --color-surface:        255 255 255; /* cartes, modals */
+    --color-surface-2:      248 249 251; /* fond de page */
+    --color-surface-3:      240 242 245; /* accents subtils, hover */
+    --color-surface-border: 229 231 235;
+
+    --color-ink:        13 17 23;   /* texte principal */
+    --color-ink-light:  55 65 81;
+    --color-ink-muted:  107 114 128;
+    --color-ink-faint:  209 213 219; /* bordures de champs, texte très discret */
+
+    /* Largeur fluide de la sidebar — source unique de vérité, consommée par
+       tailwind-preset.js (spacing.sidebar / width.sidebar) et lue en JS par
+       MobileSidebar.vue (getBoundingClientRect). */
+    --sidebar-width: clamp(252px, 16vw, 300px);
+}
+
+.dark {
+    --color-surface:        22 27 34;
+    --color-surface-2:      13 17 23;
+    --color-surface-3:      33 38 45;
+    --color-surface-border: 48 54 61;
+
+    --color-ink:        230 237 243;
+    --color-ink-light:  201 209 217;
+    --color-ink-muted:  139 148 158;
+    --color-ink-faint:  72 79 88;
+}
+
+/* ── Animations ── */
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-badge {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.6; }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+* { scrollbar-width: thin; scrollbar-color: #d1d5db transparent; }
+
+.dark ::-webkit-scrollbar-thumb { background: #30363d; }
+.dark ::-webkit-scrollbar-thumb:hover { background: #484f58; }
+.dark * { scrollbar-color: #30363d transparent; }
+
+/* ── Sidebar radial glow (::before pseudo-element) ── */
+#mainSidebar::before {
+    content: "";
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(14, 165, 233, 0.18) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ── Nav active indicator (barre gauche) ── */
+.nav-item-active::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 56%;
+    background: #38bdf8;
+    border-radius: 0 3px 3px 0;
+}
+
+.nav-badge { animation: pulse-badge 2s infinite; }
+
+/* ── Flash messages ── */
+.flash-enter { animation: slideIn 0.22s ease forwards; }
+
+/* ── Hamburger ── */
+.hamburger-bar {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+    transition: transform 0.18s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: center;
+}
+.hamburger-open .hamburger-bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger-open .hamburger-bar:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.hamburger-open .hamburger-bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ── Input mobile : évite le zoom iOS ── */
+@media (max-width: 768px) {
+    input, select, textarea { font-size: 16px !important; }
+}
+
+/* ── Tap highlight suppression ── */
+a, button { -webkit-tap-highlight-color: transparent; }
+
+/* ── Touch target minimum 44px ── */
+.btn-touch { min-height: 44px; min-width: 44px; }
+
+/* ── Sidebar overlay / masquage mobile ──
+ * Desktop (≥ 640px) : sidebar toujours visible, pas de transform.
+ * Mobile (< 640px) : .sidebar-hidden la pousse hors écran, piloté par
+ * MobileSidebar.vue via classList, pas par un utilitaire Tailwind statique.
+ */
+#sidebarOverlay { transition: opacity 0.25s; }
+
+#mainSidebar {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s;
+}
+
+@media (max-width: 639px) {
+    #mainSidebar.sidebar-hidden { transform: translateX(-100%); }
+}

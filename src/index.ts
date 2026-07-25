@@ -1,0 +1,20 @@
+// src/index.ts
+//
+// Point d'entrée unique du package @amana/shared-ui.
+// Chaque app importe depuis ici plutôt que des chemins de fichiers directs,
+// pour que la surface publique du package reste stable même si l'arborescence
+// interne change.
+
+export { default as Toast } from './components/Toast.vue';
+export { default as ConfirmDialog } from './components/ConfirmDialog.vue';
+export { default as MobileSidebar } from './components/MobileSidebar.vue';
+export { default as OfflineBanner } from './components/OfflineBanner.vue';
+export { default as Modal } from './components/Modal.vue';
+
+export { useToast } from './composables/useToast';
+export { useConfirm } from './composables/useConfirm';
+export { useModal } from './composables/useModal';
+
+export { getCurrentTheme, applyTheme, toggleTheme, registerThemeToggle } from './lib/theme';
+export type { Theme } from './lib/theme';
+export * from './lib/confirmForms';

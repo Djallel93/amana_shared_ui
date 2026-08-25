@@ -10,6 +10,8 @@ export { default as ConfirmDialog } from './components/ConfirmDialog.vue';
 export { default as MobileSidebar } from './components/MobileSidebar.vue';
 export { default as OfflineBanner } from './components/OfflineBanner.vue';
 export { default as Modal } from './components/Modal.vue';
+export { default as PersonalInfoStep } from './components/PersonalInfoStep.vue';
+export type { PersonalInfoValue, PersonalInfoLabels } from './components/PersonalInfoStep.vue';
 
 export { useToast } from './composables/useToast';
 export { useConfirm } from './composables/useConfirm';

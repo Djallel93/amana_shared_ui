@@ -9,6 +9,13 @@ export { default as Toast } from "./components/Toast.vue";
 export { default as ConfirmDialog } from "./components/ConfirmDialog.vue";
 export { default as MobileSidebar } from "./components/MobileSidebar.vue";
 export { default as OfflineBanner } from "./components/OfflineBanner.vue";
+export { default as UrgentAlertBar } from "./components/UrgentAlertBar.vue";
+export { default as NotificationBell } from "./components/NotificationBell.vue";
+export {
+  useNotifications,
+  configureNotifications,
+} from "./composables/useNotifications";
+export type { AmanaNotification } from "./composables/useNotifications";
 export { default as Modal } from "./components/Modal.vue";
 export { default as PersonalInfoStep } from "./components/PersonalInfoStep.vue";
 export type {

@@ -63,15 +63,17 @@ const { toasts, dismiss } = useToast();
         v-for="toast in toasts"
         :key="toast.id"
         class="pointer-events-auto flex items-center gap-2.5 bg-ink text-white px-4 py-3 rounded-xl shadow-lg border-l-[3px] text-[13px] font-medium min-w-[240px] max-w-[360px] cursor-pointer"
-        :class="
-          toast.type === 'success'
-            ? 'border-l-emerald-400'
-            : 'border-l-rose-400'
-        "
+        :class="{
+          'border-l-emerald-400': toast.type === 'success',
+          'border-l-amber-400': toast.type === 'warning',
+          'border-l-rose-400': toast.type === 'error',
+        }"
         @click="dismiss(toast.id)"
         role="alert"
       >
-        <span>{{ toast.type === "success" ? "✅" : "❌" }}</span>
+        <span>{{
+          toast.type === "success" ? "✅" : toast.type === "warning" ? "⚠️" : "❌"
+        }}</span>
         <span class="flex-1">{{ toast.message }}</span>
         <!-- Bouton de fermeture explicite (accessibilité) -->
         <button

@@ -9,7 +9,7 @@ import { ref } from "vue";
 // 'success' | 'error' est un "union type" : la valeur ne peut être que l'un
 // des deux strings exacts. TS refusera 'warning' ou 'ok' à la compilation.
 
-export type ToastType = "success" | "error";
+export type ToastType = "success" | "error" | "warning";
 
 export interface Toast {
   id: number; // identifiant unique pour que Vue gère le DOM proprement (key)
@@ -45,6 +45,11 @@ export function useToast() {
   // Raccourcis pratiques — pas obligatoires, mais évitent d'écrire le type partout.
   const success = (message: string) => show(message, "success");
   const error = (message: string) => show(message, "error");
+  // "warning" : action acceptée mais avec une nuance à signaler (ex. Bilan
+  // enregistré comme "pas de cours" — distinct d'un vrai 0, voir
+  // BilanView.vue) — pas une erreur (l'enregistrement a réussi), mais pas
+  // un succès silencieux non plus.
+  const warning = (message: string) => show(message, "warning", 6000);
 
   function dismiss(id: number): void {
     toasts.value = toasts.value.filter((t) => t.id !== id);
@@ -53,5 +58,5 @@ export function useToast() {
   // On expose `toasts` en lecture pour que Toast.vue puisse le lire,
   // mais on ne laisse pas l'extérieur pousser dedans directement —
   // tout passe par show() / dismiss().
-  return { toasts, show, success, error, dismiss };
+  return { toasts, show, success, error, warning, dismiss };
 }

@@ -27,19 +27,19 @@
     <slot name="footer"> : boutons d'action (optionnel)
 -->
 <script setup lang="ts">
-import { watch, onMounted, onUnmounted, useTemplateRef } from 'vue';
+import { watch, onMounted, onUnmounted, useTemplateRef } from "vue";
 
 // ── Props ─────────────────────────────────────────────────────────────────
 // defineProps<{...}>() : macro Vue qui déclare les props avec leur type TS.
 // Pas besoin d'import — c'est une macro compilée par le plugin Vite.
 const props = defineProps<{
-    open: boolean;
-    // maxWidth optionnel : DOIT être une classe Tailwind valide (ex: 'max-w-2xl'),
-    // pas une valeur CSS brute (ex: '46rem') — la valeur est injectée
-    // directement comme classe via :class, une valeur non-Tailwind serait
-    // silencieusement ignorée par le navigateur (bug déjà rencontré en
-    // construisant DetailPanel.vue : passer max-width="46rem" ne fait rien).
-    maxWidth?: string;
+  open: boolean;
+  // maxWidth optionnel : DOIT être une classe Tailwind valide (ex: 'max-w-2xl'),
+  // pas une valeur CSS brute (ex: '46rem') — la valeur est injectée
+  // directement comme classe via :class, une valeur non-Tailwind serait
+  // silencieusement ignorée par le navigateur (bug déjà rencontré en
+  // construisant DetailPanel.vue : passer max-width="46rem" ne fait rien).
+  maxWidth?: string;
 }>();
 
 // ── Emits ─────────────────────────────────────────────────────────────────
@@ -47,59 +47,62 @@ const props = defineProps<{
 // La syntaxe { close: [] } dit : l'événement "close" ne transporte pas de donnée.
 // On écrirait { select: [value: number] } si on voulait passer une valeur.
 const emit = defineEmits<{
-    close: [];
+  close: [];
 }>();
 
 // ── Ref sur l'élément DOM du conteneur modal ──────────────────────────────
 // useTemplateRef('modal-container') est lié au ref="modal-container" dans le template.
 // Il permet d'accéder à l'élément DOM réel pour la gestion du focus.
-const containerRef = useTemplateRef<HTMLDivElement>('modal-container');
+const containerRef = useTemplateRef<HTMLDivElement>("modal-container");
 
 // ── Fermeture par touche Escape ───────────────────────────────────────────
 function onKeydown(e: KeyboardEvent): void {
-    if (e.key === 'Escape' && props.open) emit('close');
+  if (e.key === "Escape" && props.open) emit("close");
 }
 
-onMounted(()  => document.addEventListener('keydown', onKeydown));
-onUnmounted(() => document.removeEventListener('keydown', onKeydown));
+onMounted(() => document.addEventListener("keydown", onKeydown));
+onUnmounted(() => document.removeEventListener("keydown", onKeydown));
 
 // ── Focus automatique à l'ouverture ──────────────────────────────────────
 // watch() observe une valeur réactive et exécute une fonction quand elle change.
 // Ici : dès que `open` passe à true, on donne le focus au conteneur.
 // { flush: 'post' } : attend que Vue ait mis à jour le DOM avant d'exécuter —
 // sinon containerRef.value ne serait pas encore visible.
-watch(() => props.open, (isOpen) => {
+watch(
+  () => props.open,
+  (isOpen) => {
     if (isOpen) {
-        setTimeout(() => containerRef.value?.focus(), 50);
+      setTimeout(() => containerRef.value?.focus(), 50);
     }
-}, { flush: 'post' });
+  },
+  { flush: "post" },
+);
 </script>
 
 <template>
-    <!--
+  <!--
         <Teleport to="body"> : Monte ce composant directement dans <body>
         plutôt que là où il est inclus dans le DOM.
         Pourquoi ? Un modal dans un div avec overflow:hidden ou z-index faible
         serait tronqué/masqué. Teleport garantit que le backdrop est toujours
         au-dessus de tout le reste, quelle que soit la structure parente.
     -->
-    <Teleport to="body">
-        <!--
+  <Teleport to="body">
+    <!--
             <Transition> anime l'entrée/sortie du modal dans son ensemble.
             v-if="open" : le modal n'existe pas du tout dans le DOM quand fermé
             (contrairement à v-show qui le cache avec display:none).
             v-if est préférable ici : reset du scroll interne, libération mémoire.
         -->
-        <Transition name="modal">
-            <div
-                v-if="open"
-                class="fixed inset-0 bg-black/45 backdrop-blur-sm z-[400]
-                       flex items-center justify-center p-4"
-                @click.self="emit('close')"
-                aria-modal="true"
-                role="dialog"
-            >
-                <!--
+    <Transition name="modal">
+      <div
+        v-if="open"
+        class="fixed inset-0 bg-black/45 backdrop-blur-sm z-[400] flex items-center justify-center p-4"
+        @click.self="emit('close')"
+        aria-modal="true"
+        role="dialog"
+      >
+        <!--
                     .self : le @click ne se déclenche QUE si on clique sur ce div
                     exactement — pas sur ses enfants (le contenu du modal).
                     Sans .self, cliquer n'importe où dans le modal le fermerait.
@@ -108,65 +111,69 @@ watch(() => props.open, (isOpen) => {
                     (via .focus()) mais n'est pas dans la navigation Tab naturelle.
                     Nécessaire pour que onKeydown fonctionne.
                 -->
-                <div
-                    ref="modal-container"
-                    class="bg-surface rounded-2xl shadow-lg w-full transform outline-none
-                           max-h-[85vh] flex flex-col"
-                    :class="maxWidth ?? 'max-w-sm'"
-                    tabindex="-1"
-                >
-                    <!-- Slot header : le parent met son titre + bouton × ici.
+        <div
+          ref="modal-container"
+          class="bg-surface rounded-2xl shadow-lg w-full transform outline-none max-h-[85vh] flex flex-col"
+          :class="maxWidth ?? 'max-w-sm'"
+          tabindex="-1"
+        >
+          <!-- Slot header : le parent met son titre + bouton × ici.
                          flex-shrink-0 : reste visible même si le corps scrolle. -->
-                    <div v-if="$slots.header" class="flex-shrink-0 flex items-center gap-2.5 px-5 py-4 border-b border-surface-3">
-                        <slot name="header" />
-                        <!-- Bouton × par défaut dans le header -->
-                        <button
-                            class="ml-auto w-8 h-8 flex items-center justify-center rounded-md
-                                   text-ink-muted hover:bg-surface-3 hover:text-ink transition-colors
-                                   bg-transparent border-0 cursor-pointer text-lg leading-none
-                                   min-h-[44px] min-w-[44px]"
-                            @click="emit('close')"
-                            aria-label="Fermer"
-                        >×</button>
-                    </div>
+          <div
+            v-if="$slots.header"
+            class="flex-shrink-0 flex items-center gap-2.5 px-5 py-4 border-b border-surface-3"
+          >
+            <slot name="header" />
+            <!-- Bouton × par défaut dans le header -->
+            <button
+              class="ml-auto w-8 h-8 flex items-center justify-center rounded-md text-ink-muted hover:bg-surface-3 hover:text-ink transition-colors bg-transparent border-0 cursor-pointer text-lg leading-none min-h-[44px] min-w-[44px]"
+              @click="emit('close')"
+              aria-label="Fermer"
+            >
+              ×
+            </button>
+          </div>
 
-                    <!-- Slot par défaut : corps du modal — scrollable, seule
+          <!-- Slot par défaut : corps du modal — scrollable, seule
                          zone qui grandit/rétrécit quand le contenu dépasse
                          85vh (formulaires longs comme DetailPanel.vue). -->
-                    <div class="px-5 py-4 overflow-y-auto flex-1">
-                        <slot />
-                    </div>
+          <div class="px-5 py-4 overflow-y-auto flex-1">
+            <slot />
+          </div>
 
-                    <!-- Slot footer : boutons d'action (optionnel). flex-shrink-0. -->
-                    <div v-if="$slots.footer" class="flex-shrink-0 px-5 pb-4 pt-3 border-t border-surface-3 flex gap-2 justify-end">
-                        <slot name="footer" />
-                    </div>
-                </div>
-            </div>
-        </Transition>
-    </Teleport>
+          <!-- Slot footer : boutons d'action (optionnel). flex-shrink-0. -->
+          <div
+            v-if="$slots.footer"
+            class="flex-shrink-0 px-5 pb-4 pt-3 border-t border-surface-3 flex gap-2 justify-end"
+          >
+            <slot name="footer" />
+          </div>
+        </div>
+      </div>
+    </Transition>
+  </Teleport>
 </template>
 
 <style scoped>
 /* Animation du backdrop + conteneur à l'entrée/sortie */
 .modal-enter-from,
 .modal-leave-to {
-    opacity: 0;
+  opacity: 0;
 }
 .modal-enter-from .bg-surface,
 .modal-leave-to .bg-surface {
-    transform: scale(0.95) translateY(8px);
+  transform: scale(0.95) translateY(8px);
 }
 .modal-enter-active {
-    transition: opacity 0.2s ease;
+  transition: opacity 0.2s ease;
 }
 .modal-enter-active .bg-surface {
-    transition: transform 0.2s ease;
+  transition: transform 0.2s ease;
 }
 .modal-leave-active {
-    transition: opacity 0.15s ease;
+  transition: opacity 0.15s ease;
 }
 .modal-leave-active .bg-surface {
-    transition: transform 0.15s ease;
+  transition: transform 0.15s ease;
 }
 </style>

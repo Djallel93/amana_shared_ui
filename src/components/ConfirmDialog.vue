@@ -8,38 +8,45 @@
     du fonctionnement asynchrone (Promise<boolean>).
 -->
 <script setup lang="ts">
-import { useConfirm } from '../composables/useConfirm';
-import Modal from './Modal.vue';
+import { useConfirm } from "../composables/useConfirm";
+import Modal from "./Modal.vue";
 
 const { state, respond } = useConfirm();
 </script>
 
 <template>
-    <Modal :open="state.open" max-width="max-w-sm" @close="respond(false)">
-        <template #header>
-            <span v-if="state.danger" class="text-lg leading-none">⚠️</span>
-            <h2 class="font-heading text-[15px] font-semibold text-ink">{{ state.title }}</h2>
-        </template>
+  <Modal :open="state.open" max-width="max-w-sm" @close="respond(false)">
+    <template #header>
+      <span v-if="state.danger" class="text-lg leading-none">⚠️</span>
+      <h2 class="font-heading text-[15px] font-semibold text-ink">
+        {{ state.title }}
+      </h2>
+    </template>
 
-        <p class="text-[13.5px] text-ink-light leading-relaxed">{{ state.message }}</p>
+    <p class="text-[13.5px] text-ink-light leading-relaxed">
+      {{ state.message }}
+    </p>
 
-        <template #footer>
-            <button
-                type="button"
-                @click="respond(false)"
-                class="px-3.5 py-2 text-[13px] font-semibold text-ink-muted hover:text-ink hover:bg-surface-3
-                       rounded-lg transition-colors bg-transparent border-0 cursor-pointer min-h-[44px]">
-                {{ state.cancelLabel }}
-            </button>
-            <button
-                type="button"
-                @click="respond(true)"
-                class="px-3.5 py-2 text-[13px] font-bold text-white rounded-lg transition-colors border-0 cursor-pointer min-h-[44px]"
-                :class="state.danger
-                    ? 'bg-rose-600 hover:bg-rose-700'
-                    : 'bg-accent hover:bg-accent-dark'">
-                {{ state.confirmLabel }}
-            </button>
-        </template>
-    </Modal>
+    <template #footer>
+      <button
+        type="button"
+        @click="respond(false)"
+        class="px-3.5 py-2 text-[13px] font-semibold text-ink-muted hover:text-ink hover:bg-surface-3 rounded-lg transition-colors bg-transparent border-0 cursor-pointer min-h-[44px]"
+      >
+        {{ state.cancelLabel }}
+      </button>
+      <button
+        type="button"
+        @click="respond(true)"
+        class="px-3.5 py-2 text-[13px] font-bold text-white rounded-lg transition-colors border-0 cursor-pointer min-h-[44px]"
+        :class="
+          state.danger
+            ? 'bg-rose-600 hover:bg-rose-700'
+            : 'bg-accent hover:bg-accent-dark'
+        "
+      >
+        {{ state.confirmLabel }}
+      </button>
+    </template>
+  </Modal>
 </template>

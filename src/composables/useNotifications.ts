@@ -35,7 +35,10 @@ let pollMs = 20000;
  * routes exposées par Amana\Shared\Http\Controllers\NotificationsController
  * (chaque app les enregistre à son propre préfixe/middleware auth).
  */
-export function configureNotifications(options: { basePath?: string; pollMs?: number }): void {
+export function configureNotifications(options: {
+  basePath?: string;
+  pollMs?: number;
+}): void {
   if (options.basePath) basePath = options.basePath;
   if (options.pollMs) pollMs = options.pollMs;
 }
@@ -45,12 +48,18 @@ let pollHandle: ReturnType<typeof setInterval> | undefined;
 let subscriberCount = 0;
 
 function csrfToken(): string {
-  return document.querySelector('meta[name="csrf-token"]')?.getAttribute("content") ?? "";
+  return (
+    document
+      .querySelector('meta[name="csrf-token"]')
+      ?.getAttribute("content") ?? ""
+  );
 }
 
 async function fetchNotifications(): Promise<void> {
   try {
-    const res = await fetch(basePath, { headers: { Accept: "application/json" } });
+    const res = await fetch(basePath, {
+      headers: { Accept: "application/json" },
+    });
     if (!res.ok) return;
     const payload = await res.json();
     notifications.value = payload.notifications ?? [];

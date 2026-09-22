@@ -16,7 +16,10 @@
 -->
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from "vue";
-import { useNotifications, type AmanaNotification } from "../composables/useNotifications";
+import {
+  useNotifications,
+  type AmanaNotification,
+} from "../composables/useNotifications";
 
 const { notifications, marquerLue } = useNotifications();
 
@@ -56,15 +59,13 @@ onUnmounted(() => document.removeEventListener("click", onClicExterieur));
     <button
       type="button"
       aria-label="Notifications"
-      class="relative w-10 h-10 rounded-full bg-surface border border-surface-border shadow-sm
-             flex items-center justify-center text-ink hover:bg-stone-50"
+      class="relative w-10 h-10 rounded-full bg-surface border border-surface-border shadow-sm flex items-center justify-center text-ink hover:bg-stone-50"
       @click="bascule"
     >
       <span aria-hidden="true">🔔</span>
       <span
         v-if="nonLues.length > 0"
-        class="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-rose-600 text-white
-               text-[10px] font-semibold flex items-center justify-center"
+        class="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-rose-600 text-white text-[10px] font-semibold flex items-center justify-center"
       >
         {{ nonLues.length > 9 ? "9+" : nonLues.length }}
       </span>
@@ -72,10 +73,12 @@ onUnmounted(() => document.removeEventListener("click", onClicExterieur));
 
     <div
       v-if="ouvert"
-      class="absolute right-0 mt-2 w-80 max-h-96 overflow-y-auto bg-surface border border-surface-border
-             rounded-xl shadow-lg py-2"
+      class="absolute right-0 mt-2 w-80 max-h-96 overflow-y-auto bg-surface border border-surface-border rounded-xl shadow-lg py-2"
     >
-      <p v-if="notifications.length === 0" class="px-4 py-6 text-[13px] text-ink-muted text-center">
+      <p
+        v-if="notifications.length === 0"
+        class="px-4 py-6 text-[13px] text-ink-muted text-center"
+      >
         Aucune notification.
       </p>
 
@@ -91,7 +94,9 @@ onUnmounted(() => document.removeEventListener("click", onClicExterieur));
           <span v-if="n.severity === 'urgent'" aria-hidden="true">🚨</span>
           {{ libelle(n) }}
         </p>
-        <p v-if="message(n)" class="text-[12px] text-ink-muted mt-0.5">{{ message(n) }}</p>
+        <p v-if="message(n)" class="text-[12px] text-ink-muted mt-0.5">
+          {{ message(n) }}
+        </p>
       </a>
     </div>
   </div>

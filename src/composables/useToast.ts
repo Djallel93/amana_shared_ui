@@ -12,9 +12,9 @@ import { ref } from "vue";
 export type ToastType = "success" | "error";
 
 export interface Toast {
-    id: number; // identifiant unique pour que Vue gère le DOM proprement (key)
-    message: string;
-    type: ToastType;
+  id: number; // identifiant unique pour que Vue gère le DOM proprement (key)
+  message: string;
+  type: ToastType;
 }
 
 // ── État partagé (module-level) ───────────────────────────────────────────
@@ -26,32 +26,32 @@ const toasts = ref<Toast[]>([]);
 
 // ── Composable ────────────────────────────────────────────────────────────
 export function useToast() {
-    function show(
-        message: string,
-        type: ToastType = "success",
-        duration = 4000,
-    ): void {
-        const id = nextId++;
-        toasts.value.push({ id, message, type });
+  function show(
+    message: string,
+    type: ToastType = "success",
+    duration = 4000,
+  ): void {
+    const id = nextId++;
+    toasts.value.push({ id, message, type });
 
-        // Retrait automatique après `duration` ms.
-        setTimeout(() => {
-            // Array.filter retourne un nouveau tableau sans l'élément supprimé.
-            // Vue détecte le remplacement de .value et met à jour le DOM.
-            toasts.value = toasts.value.filter((t) => t.id !== id);
-        }, duration);
-    }
+    // Retrait automatique après `duration` ms.
+    setTimeout(() => {
+      // Array.filter retourne un nouveau tableau sans l'élément supprimé.
+      // Vue détecte le remplacement de .value et met à jour le DOM.
+      toasts.value = toasts.value.filter((t) => t.id !== id);
+    }, duration);
+  }
 
-    // Raccourcis pratiques — pas obligatoires, mais évitent d'écrire le type partout.
-    const success = (message: string) => show(message, "success");
-    const error = (message: string) => show(message, "error");
+  // Raccourcis pratiques — pas obligatoires, mais évitent d'écrire le type partout.
+  const success = (message: string) => show(message, "success");
+  const error = (message: string) => show(message, "error");
 
-    function dismiss(id: number): void {
-        toasts.value = toasts.value.filter((t) => t.id !== id);
-    }
+  function dismiss(id: number): void {
+    toasts.value = toasts.value.filter((t) => t.id !== id);
+  }
 
-    // On expose `toasts` en lecture pour que Toast.vue puisse le lire,
-    // mais on ne laisse pas l'extérieur pousser dedans directement —
-    // tout passe par show() / dismiss().
-    return { toasts, show, success, error, dismiss };
+  // On expose `toasts` en lecture pour que Toast.vue puisse le lire,
+  // mais on ne laisse pas l'extérieur pousser dedans directement —
+  // tout passe par show() / dismiss().
+  return { toasts, show, success, error, dismiss };
 }

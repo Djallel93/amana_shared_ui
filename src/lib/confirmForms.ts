@@ -17,7 +17,7 @@
 // la réponse de l'utilisateur, puis on soumet le formulaire nous-mêmes si
 // confirmé (même pattern que GeneratePreview.vue::onRollbackSubmitClick()).
 
-import { useConfirm } from '../composables/useConfirm';
+import { useConfirm } from "../composables/useConfirm";
 
 const { ask } = useConfirm();
 
@@ -27,31 +27,31 @@ const { ask } = useConfirm();
 const bypassing = new WeakSet<HTMLFormElement>();
 
 async function onSubmit(e: SubmitEvent): Promise<void> {
-    const form = e.target as HTMLFormElement;
-    if (!(form instanceof HTMLFormElement)) return;
+  const form = e.target as HTMLFormElement;
+  if (!(form instanceof HTMLFormElement)) return;
 
-    const message = form.dataset.confirm;
-    if (!message) return; // Formulaire non concerné — comportement inchangé.
+  const message = form.dataset.confirm;
+  if (!message) return; // Formulaire non concerné — comportement inchangé.
 
-    if (bypassing.has(form)) {
-        bypassing.delete(form);
-        return; // Deuxième soumission (programmatique, post-confirmation) — on laisse passer.
-    }
+  if (bypassing.has(form)) {
+    bypassing.delete(form);
+    return; // Deuxième soumission (programmatique, post-confirmation) — on laisse passer.
+  }
 
-    e.preventDefault();
-    e.stopImmediatePropagation();
+  e.preventDefault();
+  e.stopImmediatePropagation();
 
-    const confirmed = await ask({
-        message,
-        danger: 'confirmDanger' in form.dataset,
-        confirmLabel: form.dataset.confirmLabel,
-        title: form.dataset.confirmTitle,
-    });
+  const confirmed = await ask({
+    message,
+    danger: "confirmDanger" in form.dataset,
+    confirmLabel: form.dataset.confirmLabel,
+    title: form.dataset.confirmTitle,
+  });
 
-    if (confirmed) {
-        bypassing.add(form);
-        form.requestSubmit();
-    }
+  if (confirmed) {
+    bypassing.add(form);
+    form.requestSubmit();
+  }
 }
 
 // Exposée sur window pour les cas où le message de confirmation doit être
@@ -61,22 +61,26 @@ async function onSubmit(e: SubmitEvent): Promise<void> {
 // figé au rendu Blade. Voir ce fichier pour l'usage (intercept + resoumission
 // programmatique, même pattern que onSubmit() ci-dessus).
 declare global {
-    interface Window {
-        amanaConfirm: (options: {
-            message: string;
-            danger?: boolean;
-            confirmLabel?: string;
-            title?: string;
-        }) => Promise<boolean>;
-    }
+  interface Window {
+    amanaConfirm: (options: {
+      message: string;
+      danger?: boolean;
+      confirmLabel?: string;
+      title?: string;
+    }) => Promise<boolean>;
+  }
 }
 
 window.amanaConfirm = (options) => ask(options);
 
 export function registerConfirmForms(): void {
-    // capture: true — pour s'exécuter avant tout autre listener submit
-    // éventuellement attaché au même formulaire.
-    document.addEventListener('submit', (e) => {
-        void onSubmit(e as SubmitEvent);
-    }, true);
+  // capture: true — pour s'exécuter avant tout autre listener submit
+  // éventuellement attaché au même formulaire.
+  document.addEventListener(
+    "submit",
+    (e) => {
+      void onSubmit(e as SubmitEvent);
+    },
+    true,
+  );
 }

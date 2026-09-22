@@ -41,6 +41,7 @@ let sidebar: HTMLElement | null = null;
 let overlay: HTMLElement | null = null;
 let hamburger: HTMLElement | null = null;
 let mainWrapper: HTMLElement | null = null;
+let topbar: HTMLElement | null = null;
 
 // Largeur réelle de la sidebar (source de vérité : le DOM, pas une constante
 // dupliquée). --sidebar-width est fluide (clamp() défini dans custom.css) et
@@ -75,6 +76,13 @@ function applyDom(): void {
             document.body.style.overflow = 'hidden';
             // Sur mobile, la sidebar est en overlay — le contenu ne se décale jamais.
             mainWrapper.style.marginLeft = '0px';
+            // Topbar et sidebar sont mutuellement exclusifs sur mobile : la
+            // topbar (z-[300]) restait visible par-dessus la sidebar ouverte
+            // (z-[200]), ce qui la faisait paraître flotter au-dessus.
+            // On la fait glisser hors écran tant que la sidebar est ouverte —
+            // fermer reste possible via l'overlay, un lien de nav ou Échap,
+            // donc perdre temporairement le hamburger n'empêche rien.
+            topbar?.classList.add('-translate-y-full');
         } else {
             readSidebarWidth();
             mainWrapper.style.marginLeft = sidebarWidthPx.value;
@@ -93,6 +101,10 @@ function applyDom(): void {
         // inline pour ne pas laisser une valeur desktop résiduelle après un
         // redimensionnement de fenêtre (ex: passage desktop → mobile).
         sidebar.style.transform = isMobile() ? '' : 'translateX(-100%)';
+        // Sidebar fermée (ou repliée sur desktop, où la classe n'a de toute
+        // façon aucun effet visuel — cf. media query dans amana-shared.css) :
+        // la topbar reprend sa place.
+        topbar?.classList.remove('-translate-y-full');
     }
 }
 
@@ -148,6 +160,7 @@ onMounted(() => {
     overlay     = document.getElementById('sidebarOverlay');
     hamburger   = document.getElementById('hamburgerBtn');
     mainWrapper = document.getElementById('mainWrapper');
+    topbar      = document.getElementById('mobileTopbar');
 
     // Sur mobile, l'état initial est "fermé" (sidebar cachée par défaut,
     // comme avant). On ne lit window.innerWidth qu'ici, au montage, jamais

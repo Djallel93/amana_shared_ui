@@ -30,6 +30,7 @@ export type { SearchableSelectItem } from "./components/SearchableSelect.vue";
 export { useToast } from "./composables/useToast";
 export { useConfirm } from "./composables/useConfirm";
 export { useModal } from "./composables/useModal";
+export { useTopStackOffset } from "./composables/useTopStackOffset";
 
 export {
   getCurrentTheme,

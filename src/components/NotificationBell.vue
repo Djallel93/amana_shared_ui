@@ -10,9 +10,11 @@
     tri — ce composant se contente d'afficher ce qu'on lui donne).
 
     Monté une seule fois dans le layout principal (voir app.ts,
-    #vue-notification-bell) — même emplacement fixe que pour
-    UrgentAlertBar/OfflineBanner, coin supérieur droit, pour rester visible
-    sans empiéter sur le contenu de la page.
+    #vue-notification-bell) — coin supérieur droit, décalé dynamiquement
+    (voir useTopStackOffset.ts) sous la topbar mobile et sous
+    UrgentAlertBar/OfflineBanner quand ils sont visibles, pour ne jamais les
+    recouvrir (corrigé le 23/09/2026 — la cloche restait en fixed top-3 fixe,
+    par-dessus le bouton hamburger sur mobile).
 -->
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from "vue";
@@ -20,8 +22,13 @@ import {
   useNotifications,
   type AmanaNotification,
 } from "../composables/useNotifications";
+import { useTopStackOffset } from "../composables/useTopStackOffset";
 
 const { notifications, marquerLue } = useNotifications();
+// Décale la cloche sous la topbar mobile et sous OfflineBanner/UrgentAlertBar
+// quand ils apparaissent — voir useTopStackOffset.ts pour le pourquoi (sinon
+// top-3 fixe la place en plein sur le bouton hamburger mobile).
+const { topPx } = useTopStackOffset();
 
 const ouvert = ref(false);
 const root = ref<HTMLElement | null>(null);
@@ -55,7 +62,7 @@ onUnmounted(() => document.removeEventListener("click", onClicExterieur));
 </script>
 
 <template>
-  <div ref="root" class="fixed top-3 right-4 z-[400]">
+  <div ref="root" class="fixed right-4 z-[400] transition-[top] duration-200 ease-out" :style="{ top: `${topPx}px` }">
     <button
       type="button"
       aria-label="Notifications"

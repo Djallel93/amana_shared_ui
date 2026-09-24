@@ -10,6 +10,10 @@
     (avant d'arriver à l'association, par exemple) se retrouve face à une
     erreur réseau sans comprendre pourquoi — la bannière explique la cause
     plutôt que de laisser l'état d'erreur générique des vues faire deviner.
+
+    id="offlineBanner" : lu par useTopStackOffset.ts (NotificationBell.vue)
+    pour décaler la cloche sous ce bandeau quand il est visible — ne pas
+    renommer sans mettre à jour BANNER_IDS là-bas.
 -->
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
@@ -38,6 +42,7 @@ onUnmounted(() => {
   <Transition name="offline-banner">
     <div
       v-if="isOffline"
+      id="offlineBanner"
       role="status"
       aria-live="polite"
       class="fixed top-0 inset-x-0 z-[500] bg-amber-500 text-white text-[12.5px] font-semibold text-center py-2 px-4 shadow-md"

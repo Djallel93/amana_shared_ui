@@ -23,6 +23,12 @@
     deux tournées différentes) sous forme de liste compacte plutôt que de
     n'en montrer qu'une seule à la fois et masquer les autres — l'objectif
     étant justement qu'aucune ne passe inaperçue.
+
+    id="urgentAlertBar" : lu par useTopStackOffset.ts (NotificationBell.vue)
+    pour décaler la cloche sous ce bandeau quand il est visible (hauteur
+    variable selon le nombre d'alertes empilées, d'où un ResizeObserver côté
+    cloche plutôt qu'une hauteur fixe) — ne pas renommer sans mettre à jour
+    BANNER_IDS là-bas.
 -->
 <script setup lang="ts">
 import { computed } from "vue";
@@ -48,6 +54,7 @@ function lien(n: (typeof notifications.value)[number]): string | undefined {
 <template>
   <div
     v-if="urgentesNonResolues.length > 0"
+    id="urgentAlertBar"
     role="alert"
     aria-live="assertive"
     class="fixed top-0 inset-x-0 z-[600] bg-rose-600 text-white shadow-md"

@@ -46,6 +46,22 @@ const props = withDefaults(
     errorMessage?: string;
     /** Message affiché quand la liste chargée est vide (avant filtrage). */
     emptyMessage?: string;
+    /**
+     * Liste statique fournie par le parent (ex. données déjà présentes dans
+     * les props d'une page Inertia). Si définie, aucun fetch n'est fait :
+     * apiUrl/itemsResponseKey sont ignorés.
+     */
+    items?: SearchableSelectItem[];
+    /**
+     * Mode de filtrage de la recherche :
+     *  - "contains"    (défaut, comportement d'origine) : le terme est
+     *    cherché n'importe où dans le libellé ;
+     *  - "word-prefix" : chaque mot du libellé est comparé au terme par le
+     *    DÉBUT — "A" retourne « Amine Benali » ET « Karim Alaoui » (prénom
+     *    ou nom commençant par A), pas « Salah ». Les accents/majuscules
+     *    sont ignorés.
+     */
+    matchMode?: "contains" | "word-prefix";
   }>(),
   {
     placeholder: "Sélectionner un calendrier…",
@@ -56,6 +72,8 @@ const props = withDefaults(
     searchPlaceholder: "Rechercher un calendrier…",
     errorMessage: "Impossible de contacter le service.",
     emptyMessage: "Aucun élément disponible",
+    items: undefined,
+    matchMode: "contains",
   },
 );
 
@@ -66,7 +84,7 @@ const emit = defineEmits<{
 // ── État local ────────────────────────────────────────────────────────────
 const isOpen = ref(false);
 const query = ref("");
-const items = ref<SearchableSelectItem[]>([]);
+const loadedItems = ref<SearchableSelectItem[]>([]);
 const loading = ref(false);
 const fetchError = ref("");
 
@@ -137,7 +155,7 @@ const selectedLabel = computed((): string => {
  * vide.
  */
 function labelFor(id: string): string {
-  return items.value.find((c) => c.id === id)?.name ?? id;
+  return allItems.value.find((c) => c.id === id)?.name ?? id;
 }
 
 function isSelected(item: SearchableSelectItem): boolean {
@@ -146,21 +164,45 @@ function isSelected(item: SearchableSelectItem): boolean {
     : item.id === props.modelValue;
 }
 
+// Liste effective : statique (prop `items`) ou chargée depuis l'API.
+const allItems = computed<SearchableSelectItem[]>(
+  () => props.items ?? loadedItems.value,
+);
+
+/** Minuscules + suppression des accents, pour une recherche tolérante. */
+function normalize(value: string): string {
+  return value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+function matches(name: string, q: string): boolean {
+  const n = normalize(name);
+  if (props.matchMode === "word-prefix") {
+    return n.split(/[\s'’-]+/).some((word) => word.startsWith(q));
+  }
+  return n.includes(q);
+}
+
 const filteredItems = computed(() => {
-  const q = query.value.toLowerCase().trim();
-  if (!q) return items.value;
-  return items.value.filter((c) => c.name.toLowerCase().includes(q));
+  const q = normalize(query.value).trim();
+  if (!q) return allItems.value;
+  return allItems.value.filter((c) => matches(c.name, q));
 });
 
 // ── Fetch ─────────────────────────────────────────────────────────────────
 async function fetchItems(): Promise<void> {
+  // Liste statique fournie par le parent : rien à charger.
+  if (props.items) return;
+
   const key = cacheKey();
   if (_cache.has(key)) {
-    items.value = _cache.get(key)!;
+    loadedItems.value = _cache.get(key)!;
     return;
   }
   if (_inflight.has(key)) {
-    items.value = await _inflight.get(key)!;
+    loadedItems.value = await _inflight.get(key)!;
     return;
   }
 
@@ -195,7 +237,7 @@ async function fetchItems(): Promise<void> {
     });
 
   _inflight.set(key, promise);
-  items.value = await promise;
+  loadedItems.value = await promise;
 }
 
 // ── Ouvrir / fermer ────────────────────────────────────────────────────────
@@ -205,7 +247,7 @@ async function open(): Promise<void> {
   updateDropdownPosition();
   isOpen.value = true;
   query.value = "";
-  if (!items.value.length) await fetchItems();
+  if (!allItems.value.length) await fetchItems();
   await nextTick();
   searchInputRef.value?.focus();
 }
@@ -410,7 +452,7 @@ onUnmounted(() => {
             </div>
 
             <div
-              v-else-if="fetchError && !items.length"
+              v-else-if="fetchError && !allItems.length"
               class="px-4 py-3 text-[12.5px] text-rose-700 bg-rose-50 border-t border-rose-200"
             >
               ⚠️ {{ fetchError }}

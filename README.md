@@ -68,9 +68,10 @@ export default {
 ```ts
 // resources/js/app.ts
 import { createApp } from 'vue';
-import { Toast, ConfirmDialog, MobileSidebar, OfflineBanner, registerThemeToggle } from '@amana/shared-ui';
+import { Toast, ConfirmDialog, MobileSidebar, OfflineBanner, registerThemeToggle, registerDialogs } from '@amana/shared-ui';
 
 registerThemeToggle();
+registerDialogs(); // PromptDialog + window.amanaPrompt/amanaToast (pages Blade)
 
 if (document.getElementById('vue-toast')) createApp(Toast).mount('#vue-toast');
 if (document.getElementById('vue-confirm-dialog')) createApp(ConfirmDialog).mount('#vue-confirm-dialog');
@@ -84,9 +85,20 @@ if (document.getElementById('vue-offline-banner')) createApp(OfflineBanner).moun
   composants Vue, identiques à ceux déjà utilisés par amana_web_planning
   et amana_web_familles (la version fusionnée reprend le fix `bg-ink`
   introduit côté familles pour Toast.vue).
-- `useToast`, `useConfirm`, `useModal` — composables associés.
+- `PromptDialog` + `usePrompt()` — remplace `prompt()` natif : résout à la
+  chaîne saisie, ou à `null` si l'utilisateur annule (Annuler, Escape, clic
+  sur le fond). Un appelant ne doit **jamais** traiter `null` comme un champ
+  vide validé (`if (notes === null) return;`).
+- `SearchableSelect` — accepte aussi une liste statique (`:items`) et un
+  mode de recherche `match-mode="word-prefix"` (chaque mot du libellé est
+  comparé par le début : « A » → prénom ou nom commençant par A).
+- `useToast`, `useConfirm`, `usePrompt`, `useModal` — composables associés.
 - `lib/theme.ts`, `lib/confirmForms.ts` — bascule clair/sombre et pont
   `data-confirm` → `useConfirm()` pour les formulaires classiques.
+- `lib/dialogs.ts` — `registerDialogs()` monte `PromptDialog` et expose
+  `window.amanaPrompt()` / `window.amanaToast()` (avec `window.amanaConfirm()`
+  de `confirmForms.ts`) pour le JS inline des pages Blade : remplace
+  `prompt()`, `confirm()` et `alert()` natifs sans point de montage dédié.
 - `tailwind-preset.js` — couleurs, typographie, ombres, radius.
 - `styles/amana-shared.css` — jetons de couleur clair/sombre + styles
   résiduels du shell (sidebar, hamburger, flash, scrollbar).

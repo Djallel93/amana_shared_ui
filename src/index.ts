@@ -7,6 +7,7 @@
 
 export { default as Toast } from "./components/Toast.vue";
 export { default as ConfirmDialog } from "./components/ConfirmDialog.vue";
+export { default as PromptDialog } from "./components/PromptDialog.vue";
 export { default as MobileSidebar } from "./components/MobileSidebar.vue";
 export { default as OfflineBanner } from "./components/OfflineBanner.vue";
 export { default as UrgentAlertBar } from "./components/UrgentAlertBar.vue";
@@ -29,6 +30,8 @@ export type { SearchableSelectItem } from "./components/SearchableSelect.vue";
 
 export { useToast } from "./composables/useToast";
 export { useConfirm } from "./composables/useConfirm";
+export { usePrompt } from "./composables/usePrompt";
+export type { PromptOptions } from "./composables/usePrompt";
 export { useModal } from "./composables/useModal";
 export { useTopStackOffset } from "./composables/useTopStackOffset";
 
@@ -40,3 +43,4 @@ export {
 } from "./lib/theme";
 export type { Theme } from "./lib/theme";
 export * from "./lib/confirmForms";
+export { registerDialogs } from "./lib/dialogs";

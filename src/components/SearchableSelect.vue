@@ -32,7 +32,11 @@ export interface SearchableSelectItem {
 // strictement identique, seule la sélection change.
 const props = withDefaults(
   defineProps<{
-    apiUrl: string;
+    /**
+     * URL JSON à fetch pour charger la liste. Optionnelle depuis 1.9.0 : elle
+     * n'est lue que si `items` n'est pas fourni (voir ci-dessous).
+     */
+    apiUrl?: string;
     modelValue: string | string[];
     placeholder?: string;
     inputName?: string;
@@ -64,6 +68,7 @@ const props = withDefaults(
     matchMode?: "contains" | "word-prefix";
   }>(),
   {
+    apiUrl: "",
     placeholder: "Sélectionner un calendrier…",
     inputName: "",
     inputId: "",
@@ -193,8 +198,9 @@ const filteredItems = computed(() => {
 
 // ── Fetch ─────────────────────────────────────────────────────────────────
 async function fetchItems(): Promise<void> {
-  // Liste statique fournie par le parent : rien à charger.
-  if (props.items) return;
+  // Liste statique fournie par le parent, ou aucune source du tout (ni
+  // `items` ni `apiUrl`) : rien à charger.
+  if (props.items || !props.apiUrl) return;
 
   const key = cacheKey();
   if (_cache.has(key)) {

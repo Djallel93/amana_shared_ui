@@ -89,7 +89,8 @@ if (document.getElementById('vue-offline-banner')) createApp(OfflineBanner).moun
   chaîne saisie, ou à `null` si l'utilisateur annule (Annuler, Escape, clic
   sur le fond). Un appelant ne doit **jamais** traiter `null` comme un champ
   vide validé (`if (notes === null) return;`).
-- `SearchableSelect` — accepte aussi une liste statique (`:items`) et un
+- `SearchableSelect` — accepte aussi une liste statique (`:items`, auquel cas
+  `api-url` n'est plus requis — optionnel depuis v1.9.0) et un
   mode de recherche `match-mode="word-prefix"` (chaque mot du libellé est
   comparé par le début : « A » → prénom ou nom commençant par A).
 - `useToast`, `useConfirm`, `usePrompt`, `useModal` — composables associés.

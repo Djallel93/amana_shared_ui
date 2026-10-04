@@ -16,9 +16,26 @@
 
 import { ref } from "vue";
 
+/**
+ * Ligne du récapitulatif optionnel d'une confirmation (v1.8.0, 03/10/2026) —
+ * libellé à gauche, valeur à droite. Sert aux confirmations qui doivent
+ * RÉSUMER ce qu'on s'apprête à faire (ex. « Créer la campagne » : type,
+ * dates, poids…) plutôt que d'enfiler tout dans une phrase de `message`.
+ */
+export interface ConfirmDetail {
+  label: string;
+  value: string;
+}
+
 export interface ConfirmOptions {
   title?: string;
   message: string;
+  /**
+   * Récapitulatif affiché sous le message (optionnel, rétrocompatible : sans
+   * lui la boîte est identique à avant). Un `value` peut contenir des
+   * retours à la ligne, conservés à l'affichage.
+   */
+  details?: ConfirmDetail[];
   confirmLabel?: string;
   cancelLabel?: string;
   /** Style "danger" (bouton rouge, icône ⚠️) pour les suppressions/actions irréversibles. */
@@ -29,6 +46,7 @@ interface ConfirmState {
   open: boolean;
   title: string;
   message: string;
+  details: ConfirmDetail[];
   confirmLabel: string;
   cancelLabel: string;
   danger: boolean;
@@ -38,6 +56,7 @@ const state = ref<ConfirmState>({
   open: false,
   title: "",
   message: "",
+  details: [],
   confirmLabel: "Confirmer",
   cancelLabel: "Annuler",
   danger: false,
@@ -63,6 +82,7 @@ export function useConfirm() {
         options.title ??
         (options.danger ? "Confirmer la suppression" : "Confirmation"),
       message: options.message,
+      details: options.details ?? [],
       confirmLabel:
         options.confirmLabel ?? (options.danger ? "Supprimer" : "Confirmer"),
       cancelLabel: options.cancelLabel ?? "Annuler",

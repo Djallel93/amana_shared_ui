@@ -93,6 +93,9 @@ if (document.getElementById('vue-offline-banner')) createApp(OfflineBanner).moun
   mode de recherche `match-mode="word-prefix"` (chaque mot du libellé est
   comparé par le début : « A » → prénom ou nom commençant par A).
 - `useToast`, `useConfirm`, `usePrompt`, `useModal` — composables associés.
+  `useConfirm().ask({ message, details: [{ label, value }] })` (v1.8.0) affiche en plus un
+  récapitulatif libellé/valeur sous le message — pour les confirmations qui résument ce qu'on
+  s'apprête à créer ; sans `details`, rendu inchangé.
 - `lib/theme.ts`, `lib/confirmForms.ts` — bascule clair/sombre et pont
   `data-confirm` → `useConfirm()` pour les formulaires classiques.
 - `lib/dialogs.ts` — `registerDialogs()` monte `PromptDialog` et expose

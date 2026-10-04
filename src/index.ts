@@ -30,6 +30,7 @@ export type { SearchableSelectItem } from "./components/SearchableSelect.vue";
 
 export { useToast } from "./composables/useToast";
 export { useConfirm } from "./composables/useConfirm";
+export type { ConfirmOptions, ConfirmDetail } from "./composables/useConfirm";
 export { usePrompt } from "./composables/usePrompt";
 export type { PromptOptions } from "./composables/usePrompt";
 export { useModal } from "./composables/useModal";

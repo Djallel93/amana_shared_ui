@@ -99,6 +99,13 @@ if (document.getElementById('vue-offline-banner')) createApp(OfflineBanner).moun
   s'apprête à créer ; sans `details`, rendu inchangé.
 - `lib/theme.ts`, `lib/confirmForms.ts` — bascule clair/sombre et pont
   `data-confirm` → `useConfirm()` pour les formulaires classiques.
+- `lib/submitLock.ts` — `registerSubmitLock()` : empêche la double soumission des
+  formulaires classiques marqués `data-submit-lock` (boutons désactivés avec un
+  libellé « Envoi en cours… », reverrouillage refusé, déverrouillage de sécurité
+  après 30 s et au retour via le cache « page précédente »). Options :
+  `data-submit-lock-label="…"` et `data-submit-lock-timeout="ms"`. Compatible avec
+  `data-confirm` (une confirmation refusée ne verrouille pas le formulaire) ; à
+  appeler une fois dans `app.ts`, avant ou après `registerConfirmForms()`.
 - `lib/dialogs.ts` — `registerDialogs()` monte `PromptDialog` et expose
   `window.amanaPrompt()` / `window.amanaToast()` (avec `window.amanaConfirm()`
   de `confirmForms.ts`) pour le JS inline des pages Blade : remplace

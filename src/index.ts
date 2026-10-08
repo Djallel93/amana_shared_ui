@@ -44,4 +44,5 @@ export {
 } from "./lib/theme";
 export type { Theme } from "./lib/theme";
 export * from "./lib/confirmForms";
+export { registerSubmitLock } from "./lib/submitLock";
 export { registerDialogs } from "./lib/dialogs";

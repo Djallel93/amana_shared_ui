@@ -44,7 +44,12 @@ function onKeydown(e: KeyboardEvent): void {
 </script>
 
 <template>
-  <Modal :open="state.open" max-width="max-w-md" @close="respond(null)">
+  <Modal
+    :open="state.open"
+    max-width="max-w-md"
+    elevated
+    @close="respond(null)"
+  >
     <template #header>
       <h2 class="font-heading text-[15px] font-semibold text-ink">
         {{ state.title }}

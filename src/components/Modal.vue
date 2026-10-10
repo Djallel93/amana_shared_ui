@@ -40,6 +40,12 @@ const props = defineProps<{
   // silencieusement ignorée par le navigateur (bug déjà rencontré en
   // construisant DetailPanel.vue : passer max-width="46rem" ne fait rien).
   maxWidth?: string;
+  // elevated (v1.10.1) : couche au-dessus des modals ordinaires. Réservé aux
+  // boîtes de dialogue montées une seule fois dans le body (ConfirmDialog,
+  // PromptDialog) : à z-index égal, c'est l'ordre du DOM qui décide, et un
+  // modal Teleport ouvert plus tard (panneau de détail, assistant…) passait
+  // devant la confirmation qu'il avait lui-même déclenchée.
+  elevated?: boolean;
 }>();
 
 // ── Emits ─────────────────────────────────────────────────────────────────
@@ -97,7 +103,8 @@ watch(
     <Transition name="modal">
       <div
         v-if="open"
-        class="fixed inset-0 bg-black/45 backdrop-blur-sm z-[400] flex items-center justify-center p-4"
+        class="fixed inset-0 bg-black/45 backdrop-blur-sm flex items-center justify-center p-4"
+        :class="elevated ? 'z-[500]' : 'z-[400]'"
         @click.self="emit('close')"
         aria-modal="true"
         role="dialog"

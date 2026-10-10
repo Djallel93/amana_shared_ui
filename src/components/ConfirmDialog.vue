@@ -23,6 +23,7 @@ const { state, respond } = useConfirm();
 <template>
   <Modal
     :open="state.open"
+    elevated
     :max-width="state.details.length > 0 ? 'max-w-md' : 'max-w-sm'"
     @close="respond(false)"
   >

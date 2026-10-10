@@ -93,6 +93,9 @@ if (document.getElementById('vue-offline-banner')) createApp(OfflineBanner).moun
   `api-url` n'est plus requis — optionnel depuis v1.9.0) et un
   mode de recherche `match-mode="word-prefix"` (chaque mot du libellé est
   comparé par le début : « A » → prénom ou nom commençant par A).
+- `Modal` — prop `elevated` (v1.10.1, z-index 500 au lieu de 400) : utilisée par `ConfirmDialog` et
+  `PromptDialog`, montés une seule fois dans le body, pour qu'une confirmation s'affiche toujours
+  AU-DESSUS du modal (panneau de détail, assistant…) qui l'a déclenchée.
 - `useToast`, `useConfirm`, `usePrompt`, `useModal` — composables associés.
   `useConfirm().ask({ message, details: [{ label, value }] })` (v1.8.0) affiche en plus un
   récapitulatif libellé/valeur sous le message — pour les confirmations qui résument ce qu'on

@@ -27,6 +27,13 @@ export type {
 // voir le commentaire en tête du fichier pour ce qui a été généralisé.
 export { default as SearchableSelect } from "./components/SearchableSelect.vue";
 export type { SearchableSelectItem } from "./components/SearchableSelect.vue";
+// SelectMenu (10/10/2026) : menu déroulant court et soigné (pastille, description, clavier, mode sombre),
+// pendant de SearchableSelect pour les listes de quelques options.
+export { default as SelectMenu } from "./components/SelectMenu.vue";
+export type {
+  SelectMenuOption,
+  SelectMenuTone,
+} from "./components/SelectMenu.vue";
 
 export { useToast } from "./composables/useToast";
 export { useConfirm } from "./composables/useConfirm";

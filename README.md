@@ -93,6 +93,11 @@ if (document.getElementById('vue-offline-banner')) createApp(OfflineBanner).moun
   `api-url` n'est plus requis — optionnel depuis v1.9.0) et un
   mode de recherche `match-mode="word-prefix"` (chaque mot du libellé est
   comparé par le début : « A » → prénom ou nom commençant par A).
+- `SelectMenu` (v1.12.0) — menu déroulant court et soigné pour quelques options : pastille emoji ou point
+  de couleur (`tone`), description, coche de sélection, mode sombre, RTL, panneau téléporté dans le body
+  (ouverture vers le haut si besoin) et clavier complet (↑ ↓ Début Fin Entrée Espace Échap, saisie de la
+  première lettre). `v-model` générique (garde le type exact des valeurs), `invalid`, `clearable`,
+  `searchable`, slots `selected` / `option`. Complète `SearchableSelect`, réservé aux longues listes.
 - `Modal` — prop `elevated` (v1.10.1, z-index 500 au lieu de 400) : utilisée par `ConfirmDialog` et
   `PromptDialog`, montés une seule fois dans le body, pour qu'une confirmation s'affiche toujours
   AU-DESSUS du modal (panneau de détail, assistant…) qui l'a déclenchée.

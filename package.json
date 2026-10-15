@@ -19,6 +19,9 @@
     "scripts": {
         "check:classes": "node scripts/check-classes.mjs"
     },
+    "engines": {
+        "node": "^20.19.0 || >=22.12.0"
+    },
     "peerDependencies": {
         "vue": "^3.4.0"
     },

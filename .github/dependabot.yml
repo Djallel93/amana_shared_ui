@@ -1,0 +1,29 @@
+# Dependabot : mises à jour automatiques des dépendances (15/10/2026).
+#
+# Ce paquet est distribué en source (pas de build, pas de lockfile commité :
+# voir .gitignore) ; Dependabot ne surveille donc que les devDependencies
+# déclarées dans package.json.
+#
+# - Pas de `target-branch` : les PR ciblent la branche par défaut (`main`),
+#   comme les mises à jour de SÉCURITÉ (réglages GitHub > Code security).
+# - Mises à jour de VERSION : une fois par semaine ; mineures + correctifs
+#   regroupés dans une seule PR, chaque version majeure reste une PR séparée.
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "07:00"
+      timezone: Europe/Paris
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore(deps)"
+      prefix-development: "chore(deps-dev)"
+    groups:
+      npm-minor-patch:
+        update-types:
+          - minor
+          - patch

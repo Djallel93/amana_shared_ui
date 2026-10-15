@@ -411,7 +411,7 @@ onUnmounted(() => {
       </span>
 
       <span
-        class="flex-shrink-0 text-[10px] text-ink-muted transition-transform duration-150"
+        class="shrink-0 text-[10px] text-ink-muted transition-transform duration-150"
         :class="isOpen ? 'rotate-180' : ''"
         >▼</span
       >
@@ -444,7 +444,7 @@ onUnmounted(() => {
               type="text"
               :placeholder="searchPlaceholder"
               autocomplete="off"
-              class="w-full px-2.5 py-1.5 border-[1.5px] border-ink-faint rounded-lg text-[13px] font-body text-ink bg-surface-2 outline-none transition-colors focus:border-accent focus:shadow-glow"
+              class="w-full px-2.5 py-1.5 border-[1.5px] border-ink-faint rounded-lg text-[13px] font-body text-ink bg-surface-2 outline-hidden transition-colors focus:border-accent focus:shadow-glow"
             />
           </div>
 
@@ -489,7 +489,7 @@ onUnmounted(() => {
             >
               <span
                 v-if="multiple"
-                class="flex-shrink-0 w-4 h-4 rounded border-[1.5px] flex items-center justify-center text-[10px]"
+                class="shrink-0 w-4 h-4 rounded border-[1.5px] flex items-center justify-center text-[10px]"
                 :class="
                   isSelected(item)
                     ? 'bg-accent border-accent text-white'

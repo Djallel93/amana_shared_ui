@@ -77,7 +77,7 @@ const afficherTelephoneBis = computed(
         :value="modelValue.nom"
         @input="update('nom', ($event.target as HTMLInputElement).value)"
         type="text"
-        class="w-full px-3 py-2.5 border border-ink-faint rounded-md text-[14px] bg-surface-2 outline-none focus:border-accent"
+        class="w-full px-3 py-2.5 border border-ink-faint rounded-md text-[14px] bg-surface-2 outline-hidden focus:border-accent"
       />
       <span v-if="errors.nom" class="text-[11px] text-rose-600">{{
         errors.nom
@@ -92,7 +92,7 @@ const afficherTelephoneBis = computed(
         :value="modelValue.prenom"
         @input="update('prenom', ($event.target as HTMLInputElement).value)"
         type="text"
-        class="w-full px-3 py-2.5 border border-ink-faint rounded-md text-[14px] bg-surface-2 outline-none focus:border-accent"
+        class="w-full px-3 py-2.5 border border-ink-faint rounded-md text-[14px] bg-surface-2 outline-hidden focus:border-accent"
       />
       <span v-if="errors.prenom" class="text-[11px] text-rose-600">{{
         errors.prenom
@@ -108,7 +108,7 @@ const afficherTelephoneBis = computed(
         @input="update('telephone', ($event.target as HTMLInputElement).value)"
         type="tel"
         placeholder="0123456789"
-        class="w-full px-3 py-2.5 border border-ink-faint rounded-md text-[14px] bg-surface-2 outline-none focus:border-accent"
+        class="w-full px-3 py-2.5 border border-ink-faint rounded-md text-[14px] bg-surface-2 outline-hidden focus:border-accent"
       />
       <p v-if="labels.telephoneHint" class="text-[11px] text-ink-faint mt-1">
         {{ labels.telephoneHint }}
@@ -129,7 +129,7 @@ const afficherTelephoneBis = computed(
         "
         type="tel"
         placeholder="0123456789"
-        class="w-full px-3 py-2.5 border border-ink-faint rounded-md text-[14px] bg-surface-2 outline-none focus:border-accent"
+        class="w-full px-3 py-2.5 border border-ink-faint rounded-md text-[14px] bg-surface-2 outline-hidden focus:border-accent"
       />
       <span
         v-if="errors.telephone_bis"
@@ -146,7 +146,7 @@ const afficherTelephoneBis = computed(
         :value="modelValue.email"
         @input="update('email', ($event.target as HTMLInputElement).value)"
         type="email"
-        class="w-full px-3 py-2.5 border border-ink-faint rounded-md text-[14px] bg-surface-2 outline-none focus:border-accent"
+        class="w-full px-3 py-2.5 border border-ink-faint rounded-md text-[14px] bg-surface-2 outline-hidden focus:border-accent"
       />
       <span v-if="errors.email" class="text-[11px] text-rose-600">{{
         errors.email

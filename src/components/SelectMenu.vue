@@ -406,7 +406,7 @@ onBeforeUnmount(() => {
       :aria-controls="isOpen ? listId : undefined"
       :aria-activedescendant="isOpen && activeIndex >= 0 ? optionDomId(activeIndex) : undefined"
       :aria-invalid="invalid || undefined"
-      class="btn-touch group flex w-full items-center gap-3 rounded-xl border-[1.5px] bg-surface text-start font-body transition-all duration-150 motion-reduce:transition-none focus:outline-none disabled:cursor-not-allowed disabled:opacity-60"
+      class="btn-touch group flex w-full items-center gap-3 rounded-xl border-[1.5px] bg-surface text-start font-body transition-all duration-150 motion-reduce:transition-none focus:outline-hidden disabled:cursor-not-allowed disabled:opacity-60"
       :class="[
         size === 'lg' ? 'px-3.5 py-3 text-[14px]' : 'px-3 py-2.5 text-[13.5px]',
         invalid
@@ -485,7 +485,7 @@ onBeforeUnmount(() => {
               autocomplete="off"
               :placeholder="searchPlaceholder"
               :aria-controls="listId"
-              class="w-full rounded-lg border border-surface-border bg-surface-2 px-3 py-2 text-[13px] text-ink placeholder:text-ink-muted focus:border-accent focus:outline-none focus:shadow-glow"
+              class="w-full rounded-lg border border-surface-border bg-surface-2 px-3 py-2 text-[13px] text-ink placeholder:text-ink-muted focus:border-accent focus:outline-hidden focus:shadow-glow"
               @keydown="onKeydown"
             />
           </div>

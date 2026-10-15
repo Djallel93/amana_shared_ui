@@ -6,13 +6,14 @@
  * spécifique au planning (chips de tâches, lignes "moi", etc. restent
  * dans le custom.css propre à chaque app).
  *
- * Import dans le app.css de chaque app, AVANT les directives Tailwind :
+ * Import dans le app.css de chaque app (Tailwind 4, v2.0.0+), APRÈS
+ * `@import "tailwindcss"` et dans la couche « base » (la cascade reste
+ * celle de la v3 : les utilitaires l'emportent sur ces styles) :
  *
- *   @import "@amana/shared-ui/styles/amana-shared.css";
- *   @import "./custom.css";   <!-- résiduel propre à l'app, s'il y en a -->
- *   @tailwind base;
- *   @tailwind components;
- *   @tailwind utilities;
+ *   @import "tailwindcss";
+ *   @import "@amana/shared-ui/styles/amana-shared.css" layer(base);
+ *   @import "./custom.css" layer(base);   -- résiduel propre à l'app
+ *   @config "../../tailwind.config.js";
  */
 
 /* ── Jetons de couleur (mode clair / mode sombre) ──────────────────────────

@@ -76,7 +76,7 @@ function onKeydown(e: KeyboardEvent): void {
         rows="4"
         :placeholder="state.placeholder"
         :maxlength="state.maxLength ?? undefined"
-        class="w-full rounded-lg border border-surface-border bg-surface px-3 py-2 text-[13.5px] text-ink outline-none focus:border-accent resize-y"
+        class="w-full rounded-lg border border-surface-border bg-surface px-3 py-2 text-[13.5px] text-ink outline-hidden focus:border-accent resize-y"
         @keydown="onKeydown"
       />
       <input
@@ -86,7 +86,7 @@ function onKeydown(e: KeyboardEvent): void {
         type="text"
         :placeholder="state.placeholder"
         :maxlength="state.maxLength ?? undefined"
-        class="w-full rounded-lg border border-surface-border bg-surface px-3 py-2 text-[13.5px] text-ink outline-none focus:border-accent min-h-[2.5rem]"
+        class="w-full rounded-lg border border-surface-border bg-surface px-3 py-2 text-[13.5px] text-ink outline-hidden focus:border-accent min-h-[2.5rem]"
         @keydown="onKeydown"
       />
     </label>

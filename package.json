@@ -1,6 +1,6 @@
 {
     "name": "@amana/shared-ui",
-    "version": "1.10.1",
+    "version": "2.0.0",
     "private": true,
     "type": "module",
     "description": "Composants Vue 3, composables et préréglage Tailwind partagés entre toutes les apps AMANA",
@@ -15,6 +15,9 @@
         ".": "./src/index.ts",
         "./tailwind-preset": "./tailwind-preset.js",
         "./styles/amana-shared.css": "./styles/amana-shared.css"
+    },
+    "scripts": {
+        "check:classes": "node scripts/check-classes.mjs"
     },
     "peerDependencies": {
         "vue": "^3.4.0"

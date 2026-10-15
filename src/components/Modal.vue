@@ -103,7 +103,7 @@ watch(
     <Transition name="modal">
       <div
         v-if="open"
-        class="fixed inset-0 bg-black/45 backdrop-blur-sm flex items-center justify-center p-4"
+        class="fixed inset-0 bg-black/45 backdrop-blur-xs flex items-center justify-center p-4"
         :class="elevated ? 'z-[500]' : 'z-[400]'"
         @click.self="emit('close')"
         aria-modal="true"
@@ -120,15 +120,15 @@ watch(
                 -->
         <div
           ref="modal-container"
-          class="bg-surface rounded-2xl shadow-lg w-full transform outline-none max-h-[85vh] flex flex-col"
+          class="bg-surface rounded-2xl shadow-lg w-full transform outline-hidden max-h-[85vh] flex flex-col"
           :class="maxWidth ?? 'max-w-sm'"
           tabindex="-1"
         >
           <!-- Slot header : le parent met son titre + bouton × ici.
-                         flex-shrink-0 : reste visible même si le corps scrolle. -->
+                         shrink-0 : reste visible même si le corps scrolle. -->
           <div
             v-if="$slots.header"
-            class="flex-shrink-0 flex items-center gap-2.5 px-5 py-4 border-b border-surface-3"
+            class="shrink-0 flex items-center gap-2.5 px-5 py-4 border-b border-surface-3"
           >
             <slot name="header" />
             <!-- Bouton × par défaut dans le header -->
@@ -148,10 +148,10 @@ watch(
             <slot />
           </div>
 
-          <!-- Slot footer : boutons d'action (optionnel). flex-shrink-0. -->
+          <!-- Slot footer : boutons d'action (optionnel). shrink-0. -->
           <div
             v-if="$slots.footer"
-            class="flex-shrink-0 px-5 pb-4 pt-3 border-t border-surface-3 flex gap-2 justify-end"
+            class="shrink-0 px-5 pb-4 pt-3 border-t border-surface-3 flex gap-2 justify-end"
           >
             <slot name="footer" />
           </div>

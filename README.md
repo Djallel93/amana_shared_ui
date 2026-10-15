@@ -53,15 +53,28 @@ export default {
 
 ### CSS
 
-```css
-/* resources/css/app.css — AVANT les directives Tailwind */
-@import "@amana/shared-ui/styles/amana-shared.css";
-@import "./custom.css"; /* résiduel propre à l'app, si besoin */
+> **v2.0.0 requiert Tailwind CSS 4** (≥ 4.3) et le plugin `@tailwindcss/vite`.
+> Navigateurs minimum : Safari 16.4, Chrome 111, Firefox 128. Pour Tailwind 3,
+> rester sur le tag `v1.12.0`.
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+```css
+/* resources/css/app.css */
+@import url("https://fonts.googleapis.com/…");   /* polices : en premier, hors couche */
+@import "tailwindcss";
+@import "@amana/shared-ui/styles/amana-shared.css" layer(base);
+@import "./custom.css" layer(base); /* résiduel propre à l'app, si besoin */
+
+@config "../../tailwind.config.js";  /* pont v3 : préréglage + plugin forms inchangés */
+@custom-variant hover (&:hover);     /* conserve le comportement v3 de hover: sur tactile */
+@source "../../node_modules/@amana/shared-ui/src";
 ```
+
+Les imports en `layer(base)` doivent venir **après** `@import "tailwindcss"` :
+à égalité de spécificité, la règle déclarée en dernier gagne dans une même
+couche, donc nos règles de base l'emportent sur le preflight de Tailwind.
+
+Vérification des sources : `npm run check:classes` (refuse les utilitaires
+supprimés en v4 : `flex-shrink-*`, `outline-none`, `*-opacity-N`…).
 
 ### JS — montage des composants
 

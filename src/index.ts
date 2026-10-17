@@ -53,3 +53,5 @@ export type { Theme } from "./lib/theme";
 export * from "./lib/confirmForms";
 export { registerSubmitLock } from "./lib/submitLock";
 export { registerDialogs } from "./lib/dialogs";
+// Affichage des téléphones français (17/10/2026) : « +33 1 23 45 67 89 » + valeur de lien tel:.
+export { formaterTelephoneFr, lienTelephone } from "./lib/phone";

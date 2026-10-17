@@ -17,7 +17,8 @@
         "./styles/amana-shared.css": "./styles/amana-shared.css"
     },
     "scripts": {
-        "check:classes": "node scripts/check-classes.mjs"
+        "check:classes": "node scripts/check-classes.mjs",
+        "test": "node --experimental-strip-types --test scripts/phone.test.mjs"
     },
     "engines": {
         "node": "^20.19.0 || >=22.12.0"
